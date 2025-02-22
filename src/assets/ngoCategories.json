@@ -1,0 +1,137 @@
+[
+  {
+    "category": "Education",
+    "image": "src/assets/card-images/education.jpg",
+    "description": "Focused on providing inclusive and equitable education for all age groups. This includes foundational learning at primary and secondary levels, access to higher education, specialized support for learners with disabilities, adult literacy programs, and vocational training to develop life skills. Innovations in educational technology are also emphasized to enhance learning outcomes.",
+    "subcategories": [
+      "Primary Education",
+      "Secondary Education",
+      "Higher Education",
+      "Special Education",
+      "Adult Literacy",
+      "Vocational Training",
+      "Educational Technology"
+    ]
+  },
+  {
+    "category": "Health & Medical",
+    "image": "src/assets/card-images/health.jpg",
+    "description": "Committed to improving physical and mental well-being through comprehensive healthcare services. This category encompasses general healthcare, mental health support, maternal and child health initiatives, and public health advocacy. It also covers programs for chronic disease awareness and support for individuals with disabilities.",
+    "subcategories": [
+      "General Healthcare",
+      "Mental Health",
+      "Maternal & Child Health",
+      "HIV/AIDS Awareness",
+      "Cancer Support",
+      "Disabled Support",
+      "Public Health Advocacy"
+    ]
+  },
+  {
+    "category": "Care & Shelter",
+    "image": "src/assets/card-images/care-shelter.jpg",
+    "description": "Focused on providing safe and supportive living environments for vulnerable populations. This includes orphan homes, old age homes, shelters for the homeless, and safe spaces for abused or displaced individuals. Programs aim to ensure access to basic needs, healthcare, education, and social support for residents to enhance their quality of life.",
+    "subcategories": [
+      "Orphan Homes",
+      "Old Age Homes",
+      "Homeless Shelters",
+      "Women’s Shelters",
+      "Abuse & Crisis Support",
+      "Transitional Housing",
+      "Rehabilitation Centers"
+    ]
+  },
+  {
+    "category": "Environment & Conservation",
+    "image": "src/assets/card-images/environment.jpg",
+    "description": "Dedicated to protecting and restoring natural ecosystems through sustainable practices. This includes addressing climate change, wildlife conservation, reforestation efforts, waste reduction, water conservation, and promoting renewable energy solutions. Programs also aim to educate and engage communities in sustainable agriculture and eco-friendly living.",
+    "subcategories": [
+      "Climate Change",
+      "Wildlife Conservation",
+      "Reforestation",
+      "Waste Management",
+      "Water Conservation",
+      "Renewable Energy",
+      "Sustainable Agriculture"
+    ]
+  },
+  {
+    "category": "Human Rights & Social Justice",
+    "image": "src/assets/card-images/humanrights.jpg",
+    "description": "Focused on ensuring equality, dignity, and justice for all. This includes initiatives to promote gender equality, protect the rights of children and indigenous communities, provide legal aid, support refugees and asylum seekers, and advocate for prisoners’ rights. Programs aim to eliminate discrimination and empower marginalized groups.",
+    "subcategories": [
+      "Gender Equality",
+      "Indigenous Rights",
+      "Child Protection",
+      "Legal Aid",
+      "Refugee & Asylum Support",
+      "Prisoner Rights"
+    ]
+  },
+  {
+    "category": "Poverty Alleviation",
+    "image": "src/assets/card-images/poverty.jpg",
+    "description": "Aimed at reducing poverty through programs that address food security, access to basic needs, job training, and employment opportunities. Initiatives also include microfinance for entrepreneurship, rural development programs, and empowering communities to achieve self-sufficiency and financial independence.",
+    "subcategories": [
+      "Microfinance",
+      "Employment & Job Training",
+      "Food Security",
+      "Homelessness",
+      "Basic Needs Assistance",
+      "Rural Development",
+      "Entrepreneurship Support"
+    ]
+  },
+  {
+    "category": "Disaster Relief & Emergency Services",
+    "image": "src/assets/card-images/disaster.jpg",
+    "description": "Focused on providing timely assistance during crises such as natural disasters and humanitarian emergencies. This includes search and rescue operations, emergency medical services, refugee crisis support, and post-disaster reconstruction. Programs are designed to build resilience and ensure rapid recovery for affected communities.",
+    "subcategories": [
+      "Natural Disaster Response",
+      "Humanitarian Aid",
+      "Search & Rescue",
+      "Emergency Medical Services",
+      "Refugee Crisis Response",
+      "Rehabilitation & Reconstruction"
+    ]
+  },
+  {
+    "category": "Animal Welfare",
+    "image": "src/assets/card-images/animal.jpg",
+    "description": "Dedicated to ensuring the welfare and protection of animals. This includes rescuing and sheltering abandoned animals, protecting wildlife, providing veterinary care, advocating for animal rights, improving conditions for farm animals, and preventing poaching and illegal wildlife trade.",
+    "subcategories": [
+      "Animal Rescue & Shelters",
+      "Wildlife Protection",
+      "Veterinary Services",
+      "Animal Rights Advocacy",
+      "Farm Animal Welfare",
+      "Anti-Poaching Efforts"
+    ]
+  },
+  {
+    "category": "Arts, Culture & Heritage",
+    "image": "src/assets/card-images/culture-heritage.jpg",
+    "description": "Promotes the preservation and celebration of cultural heritage and the arts. This includes initiatives to conserve historical landmarks, support museums and libraries, promote the performing and visual arts, and preserve indigenous languages and literary traditions for future generations.",
+    "subcategories": [
+      "Cultural Preservation",
+      "Performing Arts",
+      "Visual Arts",
+      "Historical Conservation",
+      "Museum & Library Support",
+      "Literary & Language Preservation"
+    ]
+  },
+  {
+    "category": "Technology & Innovation",
+    "image": "src/assets/card-images/technology.jpg",
+    "description": "Harnesses the power of technology to drive positive social change. This includes initiatives for digital inclusion, STEM education, open-source development, and using technology for social good. Programs also focus on cybersecurity awareness, AI ethics, and promoting equitable access to technological advancements.",
+    "subcategories": [
+      "Digital Inclusion",
+      "STEM Education",
+      "Open Source Development",
+      "Tech for Good",
+      "Cybersecurity Awareness",
+      "AI & Ethics"
+    ]
+  }
+]
