@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import apiUrl from "@/api/apiConfig";
 // import Navbar from "@/components/Navbar";
 // import Footer from "@/components/Footer";
 
@@ -38,7 +39,7 @@ const RegisterUser = () => {
 
 	const onSubmit = async (data: FormValues) => {
 		try{
-			const response = await fetch("http://localhost:5001/api/users/login", {
+			const response = await fetch(`${apiUrl}/api/users/login`, {
 			  method: 'POST',
 			  headers: {
 				'Content-Type': 'application/json',

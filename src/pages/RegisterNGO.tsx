@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import apiUrl from "@/api/apiConfig";
 // import Footer from "@/components/Footer";
 // import Navbar from "@/components/Navbar";
 
@@ -37,7 +38,7 @@ const RegisterNGO = () => {
 
 	const onSubmit = async (data: FormValues) => {
 		try{
-			const response = await fetch("http://localhost:5001/api/ngo/register", {
+			const response = await fetch(`${apiUrl}/api/ngo/register`, {
 			  method: 'POST',
 			  headers: {
 				'Content-Type': 'application/json',
