@@ -12,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+// import Footer from "@/components/Footer";
+// import Navbar from "@/components/Navbar";
 
 const formSchema = z.object({
     email: z.string().email("*Invalid email").nonempty("*This field is required"),
@@ -59,11 +59,12 @@ const LoginNGO = () => {
   
     return (
         <>
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="max-w-md mx-auto my-[10vh] p-4 border rounded-lg shadow">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
-                    <h1 className="font-bold text-2xl pb-4">Login to your NGO account</h1>
+                    <h1 className="font-bold text-2xl text-center">Login to your NGO account</h1>
+                    <p className="text-xs pb-4 text-center">Welcome back!</p>
                     <FormField
                         control={form.control}
                         name="email"
@@ -107,7 +108,7 @@ const LoginNGO = () => {
                 </form>
             </Form>
         </div>
-        <Footer />
+        {/* <Footer /> */}
         </>
     )
 }

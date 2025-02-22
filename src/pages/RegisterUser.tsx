@@ -12,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+// import Navbar from "@/components/Navbar";
+// import Footer from "@/components/Footer";
 
 const formSchema = z.object({
     name: z.string().min(2, "*Name is too short").nonempty("This field is required"),
@@ -62,11 +62,12 @@ const RegisterUser = () => {
 
 	return (
 		<>
-		<Navbar />
+		{/* <Navbar /> */}
 		<div className="max-w-md mx-auto my-auto p-4 border rounded-lg shadow mt-16">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
-					<h1 className="font-bold text-2xl pb-4">Register yourself</h1>
+					<h1 className="font-bold text-2xl text-center">Register Yourself</h1>
+					<p className="text-xs pb-4 text-center">Enter your details to register yourself to the community</p>
                     <FormField
 						control={form.control}
 						name="name"
@@ -127,7 +128,7 @@ const RegisterUser = () => {
 				</form>
 			</Form>
 		</div>
-		<Footer />
+		{/* <Footer /> */}
 		</>
 	)
 }

@@ -1,106 +1,299 @@
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+// import { useState, useEffect } from "react";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import * as z from "zod";
+// import {
+//   Form,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormControl,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
+// import { useNavigate } from "react-router-dom";
+// import { MapPin, ImageIcon, Trash2 } from "lucide-react";
+// import ngoCategories from "@/assets/ngoCategories.json";
+// import { useLocation } from "@/hooks/useLocation";
+// import Footer from "@/components/Footer";
+// import Navbar from "@/components/Navbar";
+// import { useAuth } from "@/context/AuthContext";
+// import { Textarea } from "@/components/ui/textarea";
+// import apiUrl from "@/api/apiConfig";
 
-type FormData = {
-  title: string;
-  location: string;
-  description: string;
-  category: string;
-  image: FileList;
-};
+// const formSchema = z.object({
+//   title: z
+//     .string()
+//     .min(3, "*Title is too short")
+//     .nonempty("*This field is required"),
+//   desc: z
+//     .string()
+//     .min(10, "*Content is too short")
+//     .nonempty("*This field is required"),
+//   location: z.string().nonempty("*This field is required"),
+//   image: z.instanceof(File).optional(),
+//   category: z.string().nonempty("*This field is required"),
+//   subcategory: z.string().optional(),
+// });
 
-const categories = [
-  { value: "animal_welfare", label: "🐾 Animal Welfare & Environmental NGOs" },
-  { value: "health", label: "🏥 Health & Medical NGOs" },
-  { value: "education", label: "📚 Education & Child Welfare NGOs" },
-  { value: "human_rights", label: "⚖️ Human Rights & Social Justice NGOs" },
-  { value: "disaster_relief", label: "🚨 Disaster Relief & Emergency Services NGOs" },
-  { value: "poverty", label: "💰 Poverty Alleviation & Economic Development NGOs" },
-  { value: "senior_support", label: "👴 Senior Citizen & Disability Support NGOs" }
-];
+// type FormValues = z.infer<typeof formSchema>;
 
-const Reportform: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<FormData>();
+// const Reportform: React.FC = () => {
 
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+//   const { token } = useAuth();
+//   const navigate = useNavigate();
+//   const [selectedCategory, setSelectedCategory] = useState("");
+//   const { location, setLocation, loading, error, fetchCurrentLocation } = useLocation();
+//   const [preview, setPreview] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
-    console.log("Form Data:", {
-      ...data,
-      image: data.image[0] ? data.image[0].name : "No image uploaded",
-    });
-  };
+//   const form = useForm<FormValues>({
+//     resolver: zodResolver(formSchema),
+//     defaultValues: {
+//       title: "",
+//       desc: "",
+//       location: "",
+//       image: undefined,
+//       category: "",
+//       subcategory: "",
+//     },
+//   });
 
-  const previewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setImagePreview(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
+//   useEffect(() => {
+//     if (location) {
+//       form.setValue("location", location, { shouldValidate: true });
+//     }
+//   }, [location]);
 
-  return (
-    <div className="container">
-      <h2>Report an Issue</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Title Field */}
-        <div className="input-group">
-          <input type="text" {...register("title", { required: "Title is required" })} placeholder=" " />
-          <label>📌 Issue Title</label>
-          {errors.title && <p className="error">{errors.title.message}</p>}
-        </div>
+//   const onSubmit = async (data: FormValues) => {
+//     try {
+//       const formData = new FormData();
+//       formData.append("title", data.title);
+//       formData.append("desc", data.desc);
+//       formData.append("location", data.location);
+//       formData.append("category", data.category);
+//       formData.append("subcategory", data.subcategory || "");
+//       if (data.image) formData.append("image", data.image);
+  
+//       const response = await fetch(`${apiUrl}/api/report/submit`, {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//         body: formData,
+//       });
+  
+//       const result = await response.json();
+//       if (response.ok) {
+//         alert("Report Submitted successfully");
+//         window.location.reload();
+//         navigate('/dashboard');
+//       } else {
+//         alert("Report submission unsuccessful: " + result.message);
+//       }
+//     } catch (error) {
+//       console.error("An error occurred, please try again!" + error);
+//     }
+//   };
+  
+//   return (
+//     <>
+//       <Navbar />
+//       <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
+//         <Form {...form}>
+//           <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-4">
+//             <div>
+//               <h1 className="font-bold text-2xl p-2">Raise a Request</h1>
+//               <p className="text-xs pb-6">
+//                 Report an Issue and Connect with NGOs for Quick Assistance
+//               </p>
+//             </div>
 
-        {/* Location Field */}
-        <div className="input-group">
-          <input type="text" {...register("location", { required: "Location is required" })} placeholder=" " />
-          <label>📍 Location</label>
-          {errors.location && <p className="error">{errors.location.message}</p>}
-        </div>
+//             <FormField
+//               name="title"
+//               control={form.control}
+//               render={({ field }) => (
+//                 <FormItem className="text-left w-full">
+//                   <FormLabel>Title</FormLabel>
+//                   <FormControl>
+//                     <Input placeholder="Enter a title" {...field} />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
 
-        {/* Description Field */}
-        <div className="input-group">
-          <textarea {...register("description", { required: "Description is required" })} rows={4} placeholder=" "></textarea>
-          <label>📝 Description</label>
-          {errors.description && <p className="error">{errors.description.message}</p>}
-        </div>
+//             <FormField
+//               name="desc"
+//               control={form.control}
+//               render={({ field }) => (
+//                 <FormItem className="text-left w-full">
+//                   <FormLabel>Description</FormLabel>
+//                   <FormControl>
+//                     <Textarea
+//                       placeholder="Write a description of the issue"
+//                       {...field}
+//                     />
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
 
-        {/* Category Dropdown */}
-        <div className="input-group">
-          <Controller
-            name="category"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <select {...field}>
-                <option value="" disabled>Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
-                ))}
-              </select>
-            )}
-          />
-        </div>
+//             <FormField
+//               control={form.control}
+//               name="location"
+//               render={({ field }) => (
+//                 <FormItem className="text-left w-full">
+//                   <FormLabel className="m-2">Location</FormLabel>
+//                   <FormControl>
+//                     <div className="flex gap-2">
+//                       <Input
+//                         placeholder="Enter the location"
+//                         {...field}
+//                         value={location}
+//                         onChange={(e) => setLocation(e.target.value)}
+//                       />
+//                       <Button
+//                         type="button"
+//                         onClick={fetchCurrentLocation}
+//                         disabled={loading}>
+//                         <MapPin />
+//                       </Button>
+//                     </div>
+//                   </FormControl>
+//                   <FormMessage className="text-xs" />
+//                   {error && (
+//                     <p className="text-red-500 text-sm">
+//                       An error ocurred, please try again!
+//                     </p>
+//                   )}
+//                 </FormItem>
+//               )}
+//             />
 
-        {/* Image Upload */}
-        <div className="file-upload" onClick={() => document.getElementById("image")?.click()}>
-          Click to Upload Image
-          <input type="file" id="image" {...register("image")} accept="image/*" onChange={previewImage} />
-        </div>
+//             <FormField
+//               control={form.control}
+//               name="category"
+//               render={({ field }) => (
+//                 <FormItem className="text-left w-full">
+//                   <FormLabel className="m-2">Category</FormLabel>
+//                   <FormControl>
+//                     <select
+//                       {...field}
+//                       className="w-full p-2 border rounded"
+//                       onChange={(e) => {
+//                         field.onChange(e);
+//                         setSelectedCategory(e.target.value);
+//                       }}>
+//                       <option value="">Select Category</option>
+//                       {ngoCategories.map(({ category }) => (
+//                         <option key={category} value={category}>
+//                           {category}
+//                         </option>
+//                       ))}
+//                     </select>
+//                   </FormControl>
+//                   <FormMessage className="text-xs" />
+//                 </FormItem>
+//               )}
+//             />
 
-        {/* Image Preview */}
-        {imagePreview && <img src={imagePreview} className="file-preview" alt="Preview" />}
+//             {selectedCategory && (
+//               <FormField
+//                 control={form.control}
+//                 name="subcategory"
+//                 render={({ field }) => (
+//                   <FormItem className="text-left w-full">
+//                     <FormLabel className="m-2">Subcategory</FormLabel>
+//                     <FormControl>
+//                       <select {...field} className="w-full p-2 border rounded">
+//                         <option value="">Select Subcategory</option>
+//                         {ngoCategories
+//                           .find(({ category }) => category === selectedCategory)
+//                           ?.subcategories.map((sub) => (
+//                             <option key={sub} value={sub}>
+//                               {sub}
+//                             </option>
+//                           ))}
+//                       </select>
+//                     </FormControl>
+//                   </FormItem>
+//                 )}
+//               />
+//             )}
 
-        {/* Submit Button */}
-        <button type="submit">Submit Report</button>
-      </form>
-    </div>
-  );
-};
+//             <FormField
+//               name="image"
+//               control={form.control}
+//               render={() => (
+//                 <FormItem className="text-left w-full">
+//                   <FormLabel>Upload Image</FormLabel>
+//                   <FormControl>
+//                     <div className="flex items-center space-x-4">
+//                       <input
+//                         type="file"
+//                         accept="image/*"
+//                         id="image"
+//                         className="hidden"
+//                         onChange={(e) => {
+//                           const file = e.target.files?.[0];
+//                           if (file) {
+//                             form.setValue("image", file);
+//                             setPreview(URL.createObjectURL(file));
+//                           }
+//                         }}
+//                       />
 
-export default Reportform;
+//                       <label
+//                         htmlFor="image"
+//                         className="cursor-pointer flex items-center px-4 py-2 border rounded-lg shadow-sm bg-gray-100 hover:bg-gray-200 transition">
+//                         <ImageIcon className="mr-2" size={18} />
+//                         Choose File
+//                       </label>
+
+//                       {preview && (
+//                         <div className="relative">
+//                           <img
+//                             src={preview}
+//                             alt="Preview"
+//                             className="h-12 w-12 rounded-lg border object-cover"
+//                           />
+
+//                           <button
+//                             type="button"
+//                             onClick={() => {
+//                               form.setValue("image", undefined);
+//                               setPreview(null);
+//                             }}
+//                             className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-md hover:bg-red-600 transition">
+//                             <Trash2 size={12} />
+//                           </button>
+//                         </div>
+//                       )}
+//                     </div>
+//                   </FormControl>
+//                   <FormMessage />
+//                 </FormItem>
+//               )}
+//             />
+
+//             <div className="flex flex-col gap-4 justify-center p-2 pt-6">
+//               <Button type="submit" className="w-full">
+//                 Submit
+//               </Button>
+//               <Button
+//                 className="text-sm font-light invert"
+//                 onClick={() => navigate("/")}>
+//                 Go back
+//               </Button>
+//             </div>
+//           </form>
+//         </Form>
+//       </div>
+//       <Footer />
+//     </>
+//   );
+// };
+
+// export default Reportform;
