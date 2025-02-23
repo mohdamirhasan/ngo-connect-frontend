@@ -82,7 +82,7 @@ const PostForm: React.FC = () => {
   return userType === "ngo" ? (
     <>
       <Navbar />
-      <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
+      <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-20">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

@@ -19,6 +19,7 @@ interface Issue {
   resolvedAt: Date;
   location: string;
   imagePath: string;
+  updatedAt: string;
 }
 
 const NGOIssuesDashboard: React.FC = () => {
@@ -47,7 +48,8 @@ const NGOIssuesDashboard: React.FC = () => {
 
         const result = await response.json();
         if (response.ok) {
-          setIssues(result);
+          const sortedIssues = result.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+          setIssues(sortedIssues);
         } else {
           console.error("Error: " + (result.message || "Failed to fetch reports"));
         }
@@ -58,7 +60,7 @@ const NGOIssuesDashboard: React.FC = () => {
 
     const fetchUserReports = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/report/${user_id}/user`, {
+        const response = await fetch(`${apiUrl}/api/report/user`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,7 +69,8 @@ const NGOIssuesDashboard: React.FC = () => {
 
         const result = await response.json();
         if (response.ok) {
-          setUserReports(result);
+          const sortedIssues = result.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+          setUserReports(sortedIssues);
         } else {
           console.error("Error: " + (result.message || "Failed to fetch reports"));
         }
@@ -114,10 +117,10 @@ const NGOIssuesDashboard: React.FC = () => {
   return userType === "ngo" ? (
     <div>
       <Navbar />
-      <div className="flex-grow p-4 sm:p-6 max-w-5xl mx-auto mt-6">
+      <div className="flex-grow p-4 sm:p-6 max-w-5xl mx-auto mt-16">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg sm:text-xl">Requests</CardTitle>
+            <CardTitle className="text-lg sm:text-xl text-center">Requests</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -218,17 +221,16 @@ const NGOIssuesDashboard: React.FC = () => {
   ) : (
     <div>
       <Navbar />
-      <div className="flex-grow p-4 sm:p-6 max-w-5xl mx-auto mt-6">
+      <div className="flex-grow p-4 sm:p-6 max-w-5xl mx-auto mt-16">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg sm:text-xl">Requests</CardTitle>
+            <CardTitle className="text-lg sm:text-xl text-center">Requests</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>#</TableHead>
                     <TableHead className="w-[10vw]">Status</TableHead>
                     <TableHead className="w-[10vw]">
                       <div className="flex items-center cursor-pointer">
@@ -243,7 +245,6 @@ const NGOIssuesDashboard: React.FC = () => {
                 <TableBody>
                   {userReports.map((issue, index) => (
                     <TableRow key={issue._id}>
-                      <TableCell className="text-left">{index + 1}</TableCell>
                       <TableCell className="text-left">
                         <Badge variant={!!issue.resolvedAt ? "secondary" : "destructive"}>
                           {!!issue.resolvedAt ? "Resolved" : "Not Resolved"}
@@ -253,7 +254,7 @@ const NGOIssuesDashboard: React.FC = () => {
                       <TableCell className="text-left">{issue.desc}</TableCell>
                       <TableCell className="text-left">{issue.location}</TableCell>
                       <TableCell className="flex gap-2">
-                        <Button size="sm" onClick={() => setSelectedIssue(issue)}>
+                        <Button size="sm" onClick={() => setSelectedIssue(issue)} className="flex items-center justify-center">
                           View
                         </Button>
                       </TableCell>

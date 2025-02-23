@@ -99,7 +99,7 @@ const Reportform: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
+      <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-20">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-4">
             <div>

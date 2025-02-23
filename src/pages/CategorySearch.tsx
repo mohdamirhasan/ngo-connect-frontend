@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Dot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FileWarning } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -103,8 +104,8 @@ const CategorySearch = () => {
                 <TableRow>
                   <TableHead className="w-[5vw]">#</TableHead>
                   <TableHead className="w-[20vw]">Name</TableHead>
-                  <TableHead className="w-[25vw]">Subcategory</TableHead>
-                  <TableHead className="hidden md:table-cell w-[20vw]">
+                  <TableHead className="w-[15vw]">Subcategory</TableHead>
+                  <TableHead className="hidden md:table-cell w-[25vw]">
                     Address
                   </TableHead>
                   <TableHead className="hidden md:table-cell w-[15vw]">
@@ -116,9 +117,9 @@ const CategorySearch = () => {
               <TableBody>
                 {ngos
                   .filter((ngo) => ngo.category === category.category)
-                  .map((ngo, index) => (
+                  .map((ngo) => (
                     <TableRow key={ngo.ngoId}>
-                      <TableCell className="text-left">{index + 1}</TableCell>
+                      <TableCell className="text-left"><Dot /></TableCell>
                       <TableCell className="text-left">{ngo.name}</TableCell>
                       <TableCell className="text-left">
                         {ngo.subcategory}

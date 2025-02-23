@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Trash2 } from 'lucide-react';
 import apiUrl from '@/api/apiConfig';
 import useNGOInfo from '@/hooks/useNGOinfo';
+import { AlertTriangle } from 'lucide-react';
 
 const CommunityPage: React.FC = () => {
 
@@ -17,9 +18,10 @@ const CommunityPage: React.FC = () => {
     setUserType(localStorage.getItem('userType'));
     setUser_id(localStorage.getItem('user_id'));
   }, [isLoggedIn]);
+
     
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<Array<{ id: string; NGOname: string; title: string; imagePath: string; content: string; updatedAt: string; ngo_id: string; _id:string; }>>([]);
+  const [posts, setPosts] = useState<Array<{ NGOname: string; title: string; imagePath: string; content: string; updatedAt: string; ngo_id: string; _id:string; }>>([]);
 
   const fetchPosts = async () => {
     try {
@@ -47,27 +49,30 @@ const CommunityPage: React.FC = () => {
     fetchPosts();
   }, [token, userType, user_id]);
 
-  const deletePost = async () => {
-    try {
-      const response = await fetch (`${apiUrl}/api/post/delete`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
 
-      const result = await response.json();
-      if(response.ok){
-        alert('Post deleted!');
-        fetchPosts();
+  const deletePost = async (id: string) => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      try {
+        const response = await fetch (`${apiUrl}/api/post/${id}/delete`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const result = await response.json();
+        if(response.ok){
+          alert('Post deleted!');
+          fetchPosts();
+        }
+        else{
+          alert("Error: Couldn't delete");
+        }
+      } catch (error) {
+        console.error('An error occured, please try again!' + error);
       }
-      else{
-        alert("Error: " + result.message);
-      }
-    } catch (error) {
-      console.error('An error occured, please try again!' + error);
-    }
   }
+}
 
   function getTimeDifference(targetTime: string): string {
     const targetDate = new Date(targetTime);
@@ -125,10 +130,16 @@ const CommunityPage: React.FC = () => {
               <CardContent className='text-justify'>{post.content}</CardContent>
               <div className='text-right p-4 text-xs'>{getTimeDifference(post.updatedAt)}</div>
               {post.ngo_id === user_id && (
-              <button className='bg-none absolute text-red-500 top-4 right-4' onClick={deletePost}><Trash2 size={20}/></button>
+              <button className='bg-none absolute text-red-500 top-4 right-4' onClick={() => deletePost(post._id)}><Trash2 size={20}/></button>
               )}
             </div>
           ))}
+          {posts.length == 0 && (
+            <div className="flex flex-col items-center justify-center h-full">
+              <AlertTriangle size={48} className="text-gray-400 mb-4" />
+              <p className="text-gray-600 text-xs mb-4">No posts available</p>
+            </div>
+          )}
           </Card>
       </div>
     </>

@@ -66,7 +66,7 @@ const LoginNGO = () => {
     return (
         <>
         <Navbar />
-        <div className="max-w-md mx-auto my-[10vh] p-4 border rounded-lg shadow">
+        <div className="max-w-md mx-auto my-[10vh] p-4 border rounded-lg shadow mt-20">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
                     <h1 className="font-bold text-2xl text-center">Login to your NGO account</h1>

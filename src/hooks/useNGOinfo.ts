@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import apiUrl from "@/api/apiConfig";
 
 const useNGOInfo = (Token: any) => {
-  const [userType, setUserType] = useState<"ngo" | "user" | null>(null);
+  const [userType, setUserType] = useState<string | null>(null);
   const [user_id, setUser_id] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -18,8 +18,7 @@ const useNGOInfo = (Token: any) => {
         const data = await response.json();
 
         if (response.ok){
-            console.log(data);
-          setUserType(data.role === "ngo" ? "ngo" : "user");
+          setUserType("ngo");
           setUser_id(data.id);
         }
         else{
@@ -45,7 +44,7 @@ const useNGOInfo = (Token: any) => {
     }
   }, [userType, user_id, Token]);
 
-  return { isLoggedIn, setIsLoggedIn };
+  return { isLoggedIn };
 };
 
 export default useNGOInfo;

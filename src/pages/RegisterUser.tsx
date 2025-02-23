@@ -64,7 +64,7 @@ const RegisterUser = () => {
 	return (
 		<>
 		<Navbar />
-		<div className="max-w-md mx-auto my-auto p-4 border rounded-lg shadow mt-16">
+		<div className="max-w-md mx-auto my-auto p-4 border rounded-lg shadow mt-20">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
 					<h1 className="font-bold text-2xl text-center">Register Yourself</h1>

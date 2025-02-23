@@ -2,162 +2,108 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import useUserInfo from "@/hooks/useUserInfo";
+import useNGOInfo from "@/hooks/useNGOinfo";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import apiUrl from "@/api/apiConfig";
 
-
 const ProfilePage: React.FC = () => {
-
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
-  const navigate = useNavigate();
   const { token, logout } = useAuth();
-  const [isloggedIn, SetisloggedIn] = useState(false);
-  const { isLoggedIn } = useUserInfo(token);
-  const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [userType, setUserType] = useState<string | null>(null);
+  const navigate = useNavigate();
+  
+  const [userType, setUserType] = useState<string | null>(localStorage.getItem("userType"));
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const ngoInfo = useNGOInfo(token);
+  const userInfo = useUserInfo(token);
+  const isLoggedIn = userType === "ngo" ? ngoInfo?.isLoggedIn : userInfo?.isLoggedIn;
 
   useEffect(() => {
-    setUserType(localStorage.getItem('userType'));
-  }, [isLoggedIn]);
+    if (!token) {
+      setName("");
+      setEmail("");
+      return;
+    }
 
-  const fetchUser = async() => {
-    try {
-      const response = await fetch(`${apiUrl}/api/users/current`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-      },
-      });
+    const fetchProfile = async () => {
+      try {
+        const endpoint = userType === "ngo" ? "/api/ngo/current" : "/api/users/current";
+        const response = await fetch(`${apiUrl}${endpoint}`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
 
-      const data = await response.json();
-      if (response.ok) {
-        setName(data.user.name);
-        setEmail(data.user.email);
-        SetisloggedIn(true);
+        if (response.ok) {
+          setName(data.name);
+          setEmail(data.email);
+        } else {
+          console.error("Error fetching data:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
       }
-      else{
-        console.error("Error: " + data.message); 
-      }
-      
-      
-    } catch (error) {
-      console.error('Error fetching user data:' + error);
-    }
-  }
+    };
 
-  const fetchNgo = async() => {
-    try {
-      const response = await fetch(`${apiUrl}/api/ngo/current`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok){
-        setName(data.name);
-        setEmail(data.email);
-        SetisloggedIn(true);
-      }
-      else{
-        console.error("No NGO found: " + data.message);
-      }
-      
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  }
+    fetchProfile();
+  }, [token, userType]);
 
-  useEffect(() => {
-    if(!token){
-      SetisloggedIn(false);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (userType === "user"){
-      fetchUser();
-    }
-    else if (userType === "ngo"){
-      fetchNgo();
-    }
-  }, [userType])
-
-  const handleLogin = (type: 'user' | 'ngo') => {
+  const handleLogin = (type: "user" | "ngo") => {
     navigate(`/login-${type}`);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userType');
-    localStorage.removeItem('user_id');
+    localStorage.clear();
     logout();
-  }
-
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-6">
       <Navbar />
-      <div className=" mt-12 max-w-4xl mx-auto">
+      <div className="mt-12 max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 text-center dark:text-gray-100 mt-4">Profile</h1>
 
         {/* Profile Settings Card */}
         <Card className="my-6">
-                <CardHeader className="text-center">
-                  <CardDescription className="text-gray-600">
-                    {isloggedIn ? `Welcome back, ${Name}!` : 'Please register or login to continue.'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {isloggedIn ? (
-                    <div className="max-w-md mx-auto">
-                    <div className="space-y-4">
-                      <div className="">
-                        <p className="text-lg font-semibold text-gray-900 text-left">{Email}</p>
-                        <p className="text-sm text-gray-900 text-left">
-                          {userType === 'ngo' ? 'NGO' : 'User'}
-                        </p>
-                      </div>
-                    </div>          
-                      <Button
-                        onClick={handleLogout}
-                        className="w-full mt-4 bg-red-500 hover:bg-red-600 text-white"
-                      >
-                        Logout
-                      </Button>
-                      <Button
-                        onClick={handleLogout}
-                        className="w-full mt-4"
-                      >
-                        Edit Profile
-                      </Button>
-                    </div>
-                    
-                  ) : (
-                    <div className="space-y-4">
-                      <Button
-                        onClick={() => handleLogin('user')}
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-                      >
-                        Login as User
-                      </Button>
-                      <Button
-                        onClick={() => handleLogin('ngo')}
-                        className="w-full bg-purple-500 hover:bg-purple-600 text-white"
-                      >
-                        Login as NGO
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+          <CardHeader className="text-center">
+            <CardDescription className="text-gray-600">
+              {isLoggedIn ? `Welcome back, ${name}!` : "Please register or login to continue."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isLoggedIn ? (
+              <div className="max-w-md mx-auto space-y-4">
+                <div>
+                  <p className="text-lg font-semibold text-gray-900 text-left">{email}</p>
+                  <p className="text-sm text-gray-900 text-left">{userType === "ngo" ? "NGO" : "User"}</p>
+                </div>
+                <Button onClick={handleLogout} className="w-full mt-4 bg-red-500 hover:bg-red-600 text-white">
+                  Logout
+                </Button>
+                <Button onClick={() => navigate("/edit-profile")} className="w-full mt-4">
+                  Edit Profile
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Button onClick={() => handleLogin("user")} className="w-full bg-blue-500 hover:bg-blue-600 text-white">
+                  Login as User
+                </Button>
+                <Button onClick={() => handleLogin("ngo")} className="w-full bg-purple-500 hover:bg-purple-600 text-white">
+                  Login as NGO
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Theme Settings Card */}
         <Card className="mb-6 text-center">
@@ -204,11 +150,9 @@ const ProfilePage: React.FC = () => {
             <CardDescription>Irreversible actions. Proceed with caution.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4 space-x-2">
-              <Button variant="destructive" className="w-full sm:w-auto">
-                Delete Account
-              </Button>
-            </div>
+            <Button variant="destructive" className="w-full sm:w-auto">
+              Delete Account
+            </Button>
           </CardContent>
         </Card>
       </div>
