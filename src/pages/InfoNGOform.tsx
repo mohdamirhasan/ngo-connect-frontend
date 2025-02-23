@@ -15,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { MapPin } from "lucide-react";
 import ngoCategories from "@/assets/ngoCategories.json"
-// import { useLocation } from "@/hooks/useLocation";
+import { useLocation } from "@/hooks/useLocation";
+import apiUrl from "@/api/apiConfig";
 // import Footer from "@/components/Footer";
 // import Navbar from "@/components/Navbar";
 
@@ -37,7 +38,7 @@ type FormValues = z.infer<typeof formSchema>;
 const InfoNGOform = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
-  // const { location, setLocation, loading, error, fetchCurrentLocation } = useLocation();
+  const { location, setLocation, loading, error, fetchCurrentLocation } = useLocation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -53,13 +54,13 @@ const InfoNGOform = () => {
 
   useEffect(() => {
     if (location) {
-      // form.setValue("location", location, { shouldValidate: true });
+      form.setValue("location", location, { shouldValidate: true });
     }
   }, [location]);
 
   const onSubmit = async (data: FormValues) => {
     try{
-      const response = await fetch("http://localhost:5001/api/ngo/register-info", {
+      const response = await fetch(`${apiUrl}/api/ngo/register-info`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +152,7 @@ const InfoNGOform = () => {
               <FormItem className="text-left w-full">
                 <FormLabel className="m-2">Location</FormLabel>
                 <FormControl>
-                  {/* <div className="flex gap-2">
+                  <div className="flex gap-2">
                     <Input
                       placeholder="Enter the location"
                       {...field}
@@ -162,10 +163,10 @@ const InfoNGOform = () => {
                     <Button type="button" onClick={fetchCurrentLocation} disabled={loading}>
                       <MapPin />
                     </Button>
-                  </div> */}
+                  </div>
                 </FormControl>
                 <FormMessage className="text-xs" />
-                {/* {error && <p className="text-red-500 text-sm">An error ocurred, please try again!</p>} */}
+                {error && <p className="text-red-500 text-sm">An error ocurred, please try again!</p>}
               </FormItem>
             )}
           />
