@@ -15,12 +15,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { FileWarning } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import apiUrl from "@/api/apiConfig";
+
+interface Ngo {
+  category: string;
+  subcategory: string;
+  contact_no: string;
+  email: string;
+  location: string;
+  name: string;
+  ngoId: string;
+}
 
 const CategorySearch = () => {
 
-
+  const [ngos, setNgos] = useState<Ngo[]>([]);
   const category = useParams();
-  const [description, Setdescription] = useState("");
+  const [description, setdescription] = useState("");
   const [dialog, setDialog] = useState(false);
   const [selectedNgo, SetSelectedNgo] = useState({
     name: '',
@@ -33,42 +44,37 @@ const CategorySearch = () => {
       (item) => item.category === category.category
     );
     if (foundCategory) {
-      Setdescription(foundCategory.description);
+      setdescription(foundCategory.description);
     }
   }, [category]);
 
-  interface Ngo {
-    _id: string;
-    name: string;
-    category: string;
-    subcategory: string;
-    location: string;
-    contact_no: string;
+
+  const fetchNgos = async () => {
+    try {
+      const response = await fetch (`${apiUrl}/api/ngo/${category.category}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const result = await response.json();
+      if(response.ok){
+        setNgos(result);
+      }
+      else{
+        console.error("Error: " + result.message);
+      }
+    } catch (error) {
+        console.error("An error occured, please try again!" + error);
+    }
   }
 
-  const [ngos, SetNgos] = useState<Ngo[]>([]);
   useEffect(() => {
-    // api call to fetch NGOs
-    SetNgos([{
-      _id: "1",
-      name: "Animal",
-      category: "Animal Welfare",
-      subcategory: "Farm Animal",
-      location: "Aligarh, Uttar Pradesh",
-      contact_no: "9192480982"
-    },
-    {
-        _id: "2",
-        name: "Education",
-        category: "Education",
-        subcategory: "Farm Animal",
-        location: "Aligarh, Uttar Pradesh",
-        contact_no: "9192480982"
-      }]);
+    fetchNgos();
   }, []);
 
   const handleView = (name: string, subcategory: string, location: string, contact_no: string) => {
-    console.log(name, subcategory, location, contact_no);
     setDialog(true);
     SetSelectedNgo({
       name: name,
@@ -78,17 +84,18 @@ const CategorySearch = () => {
     })
   }
 
+
   return (
     <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen w-full m-0 flex flex-col">
       <Navbar />
       <div className="mt-16 w-full flex flex-col gap-6 justify-center items-center">
-        <h1 className="font-bold text-3xl">{category.category}</h1>
+        <h1 className="font-bold text-3xl text-center mt-4">{category.category}</h1>
         <p className="max-w-5xl text-justify px-6">{description}</p>
       </div>
       <div className="mt-10 mx-auto">
         <Card className="max-w-5xl">
           <CardHeader>
-            <CardTitle className="text-xl">{category.category} NGOs</CardTitle>
+            <CardTitle className="text-xl text-center">{category.category} NGOs</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -110,7 +117,7 @@ const CategorySearch = () => {
                 {ngos
                   .filter((ngo) => ngo.category === category.category)
                   .map((ngo, index) => (
-                    <TableRow key={ngo._id}>
+                    <TableRow key={ngo.ngoId}>
                       <TableCell className="text-left">{index + 1}</TableCell>
                       <TableCell className="text-left">{ngo.name}</TableCell>
                       <TableCell className="text-left">

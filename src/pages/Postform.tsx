@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,8 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Trash2 } from "lucide-react";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import useUserInfo from "@/hooks/useUserInfo";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,12 @@ const PostForm: React.FC = () => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState<string | null>(null);
   const { token } = useAuth();
-  const { userType } = useUserInfo(token);
+  const { isLoggedIn } = useUserInfo(token); 
+  const [userType, setUserType] = useState<string | null>(null);
+  
+    useEffect(() => {
+      setUserType(localStorage.getItem('userType'));
+    }, [isLoggedIn]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -76,7 +81,7 @@ const PostForm: React.FC = () => {
 
   return userType === "ngo" ? (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
         <Form {...form}>
           <form
@@ -185,14 +190,13 @@ const PostForm: React.FC = () => {
           </form>
         </Form>
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </>
-  ) : null;
-  
-  if (userType !== "ngo") {
-    navigate('/login-ngo');
-    return null;
-  }
+  ) : (
+    <div>
+      <h1 className="text-2xl text-center mt-16" onClick={() => navigate('/login-ngo')}>You are not authorized to access this page</h1>
+    </div>
+  ); 
 };
 
 export default PostForm;

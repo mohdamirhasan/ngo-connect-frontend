@@ -13,8 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import apiUrl from "@/api/apiConfig";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const formSchema = z.object({
     name: z.string().min(2, "*Name is too short").nonempty("This field is required"),
@@ -57,13 +57,13 @@ const RegisterUser = () => {
 			}
 		  }
 		  catch (error) {
-			alert("An error occured, Please try again!")
+			console.error("An error occured, Please try again!" + error);
 		  }
 	}
 
 	return (
 		<>
-		{/* <Navbar /> */}
+		<Navbar />
 		<div className="max-w-md mx-auto my-auto p-4 border rounded-lg shadow mt-16">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
@@ -129,7 +129,7 @@ const RegisterUser = () => {
 				</form>
 			</Form>
 		</div>
-		{/* <Footer /> */}
+		<Footer />
 		</>
 	)
 }

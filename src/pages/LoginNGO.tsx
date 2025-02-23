@@ -12,9 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import apiUrl from "@/api/apiConfig";
-// import Footer from "@/components/Footer";
-// import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 const formSchema = z.object({
     email: z.string().email("*Invalid email").nonempty("*This field is required"),
@@ -24,6 +25,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const LoginNGO = () => {
+
+    const { login } = useAuth();
     const navigate = useNavigate();
   
     const form = useForm<FormValues>({
@@ -45,22 +48,24 @@ const LoginNGO = () => {
 			});
 	  
 			const result = await response.json();
-			if(response.ok){
-			  alert(result.message);
-			  navigate('/dashboard');
+			if(response.ok){ 
+                const token = result.accessToken;
+                login(token);
+                alert("Logged in successfully as NGO");
+                navigate('/dashboard');
 			}
 			else{
 			  alert("Error: " + result.message);
 			}
 		  }
 		  catch (error) {
-			alert("An error occured, Please try again!")
+			console.error("An error occured, Please try again!" + error);
 		  }
     }
   
     return (
         <>
-        {/* <Navbar /> */}
+        <Navbar />
         <div className="max-w-md mx-auto my-[10vh] p-4 border rounded-lg shadow">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
@@ -109,7 +114,7 @@ const LoginNGO = () => {
                 </form>
             </Form>
         </div>
-        {/* <Footer /> */}
+        <Footer />
         </>
     )
 }

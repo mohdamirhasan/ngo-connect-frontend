@@ -17,10 +17,10 @@ import { MapPin } from "lucide-react";
 import ngoCategories from "@/assets/ngoCategories.json"
 import { useLocation } from "@/hooks/useLocation";
 import apiUrl from "@/api/apiConfig";
-// import Footer from "@/components/Footer";
-// import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
-// Validation schema
+
 const formSchema = z.object({
   name: z
     .string()
@@ -70,7 +70,7 @@ const InfoNGOform = () => {
 
       const result = await response.json();
       if(response.ok){
-        alert(result.message);
+        alert("NGO information registered");
         navigate("/login-ngo");
       }
       else{
@@ -78,13 +78,13 @@ const InfoNGOform = () => {
       }
     }
     catch (error) {
-      alert("An error occured, Please try again!")
+      console.error("An error occured, Please try again!" + error);
     }
   };
 
   return (
     <>
-    {/* <Navbar /> */}
+    <Navbar />
     <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-4">
@@ -233,7 +233,7 @@ const InfoNGOform = () => {
         </form>
       </Form>
     </div>
-    {/* <Footer /> */}
+    <Footer />
     </>
   );
 };

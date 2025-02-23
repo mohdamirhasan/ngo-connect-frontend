@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import apiUrl from "@/api/apiConfig";
 
-const useUserInfo = (Token: any) => {
+const useNGOInfo = (Token: any) => {
   const [userType, setUserType] = useState<"ngo" | "user" | null>(null);
   const [user_id, setUser_id] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const useUserInfo = (Token: any) => {
     }
   }, [userType, user_id, Token]);
 
-  return { isLoggedIn };
+  return { isLoggedIn, setIsLoggedIn };
 };
 
-export default useUserInfo;
+export default useNGOInfo;

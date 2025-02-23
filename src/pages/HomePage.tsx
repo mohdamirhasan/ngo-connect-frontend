@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-// import CommunityPage from "./CommunityPage";
+import CommunityPage from "./CommunityPage";
 import { Card } from "@/components/ui/card";
 import ngoCategories from "@/assets/ngoCategories.json";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ function HomePage() {
       <Navbar />
 
       <div className="flex-grow mt-4 p-4 sm:mt-8 sm:p-8 flex flex-col items-center justify-center">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-center text-gray-800">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-4 mb-4 sm:mb-6 text-center text-gray-800">
         Welcome to Our NGO Community!
       </h1>
       <p className="text-base sm:text-lg text-center text-gray-600 mb-6 sm:mb-8">
@@ -27,7 +27,7 @@ function HomePage() {
             src={category.image}
             className="h-full max-[500px]:h-36 object-cover flex items-center"
           />
-          <div className="text-sm max-[700px]:text-[13px] font-bold mb-2 text-gray-800 p-1 leading-tight">
+          <div className="text-sm max-[700px]:text-[13px] text-center font-bold mb-2 text-gray-800 p-1 leading-tight">
             {category.category}
           </div>
           </Card>
@@ -35,7 +35,7 @@ function HomePage() {
         ))}
       </div>
       </div>
-      {/* <CommunityPage /> */}
+      <CommunityPage />
       <Footer />
     </div>
   );

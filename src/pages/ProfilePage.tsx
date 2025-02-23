@@ -4,10 +4,11 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-// import { useAuth } from "@/context/AuthContext";
-// import useUserInfo from "@/hooks/useUserInfo";
+import { useAuth } from "@/context/AuthContext";
+import useUserInfo from "@/hooks/useUserInfo";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import apiUrl from "@/api/apiConfig";
 
 
 const ProfilePage: React.FC = () => {
@@ -15,100 +16,113 @@ const ProfilePage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const navigate = useNavigate();
-//   const { token, logout } = useAuth();
-  const [isLoggedIn, SetIsLoggedIn] = useState(false);
-//   const { userType } = useUserInfo(token);
+  const { token, logout } = useAuth();
+  const [isloggedIn, SetisloggedIn] = useState(false);
+  const { isLoggedIn } = useUserInfo(token);
   const [Name, setName] = useState("");
   const [Email, setEmail] = useState("");
+  const [userType, setUserType] = useState<string | null>(null);
 
+  useEffect(() => {
+    setUserType(localStorage.getItem('userType'));
+  }, [isLoggedIn]);
 
   const fetchUser = async() => {
     try {
-      const response = await fetch('http://localhost:5001/api/users/current', {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
+      const response = await fetch(`${apiUrl}/api/users/current`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+      },
       });
-      if (!response.ok) {
-      throw new Error('Failed to fetch user data');
-      }
+
       const data = await response.json();
-      setName(data.user.name);
-      setEmail(data.user.email);
-      SetIsLoggedIn(true);
+      if (response.ok) {
+        setName(data.user.name);
+        setEmail(data.user.email);
+        SetisloggedIn(true);
+      }
+      else{
+        console.error("Error: " + data.message); 
+      }
+      
       
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching user data:' + error);
     }
   }
 
   const fetchNgo = async() => {
     try {
-      const response = await fetch('http://localhost:5001/api/ngo/current', {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
+      const response = await fetch(`${apiUrl}/api/ngo/current`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      if (!response.ok) {
-      throw new Error('Failed to fetch user data');
-      }
       const data = await response.json();
-      console.log(data);
-      setName(data.name);
-      setEmail(data.email);
-      SetIsLoggedIn(true);
+      if (response.ok){
+        setName(data.name);
+        setEmail(data.email);
+        SetisloggedIn(true);
+      }
+      else{
+        console.error("No NGO found: " + data.message);
+      }
       
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
   }
 
-//   useEffect(() => {
-//     if(!token){
-//       SetIsLoggedIn(false);
-//     }
-//   }, [token]);
+  useEffect(() => {
+    if(!token){
+      SetisloggedIn(false);
+    }
+  }, [token]);
 
-//   useEffect(() => {
-//     if (userType === "user"){
-//       fetchUser();
-//     }
-//     else if (userType === "ngo"){
-//       fetchNgo();
-//     }
-//   }, [userType])
+  useEffect(() => {
+    if (userType === "user"){
+      fetchUser();
+    }
+    else if (userType === "ngo"){
+      fetchNgo();
+    }
+  }, [userType])
 
   const handleLogin = (type: 'user' | 'ngo') => {
     navigate(`/login-${type}`);
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    // logout();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('user_id');
+    logout();
   }
 
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-6">
       <Navbar />
-      <div className=" mt-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Profile</h1>
+      <div className=" mt-12 max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 text-center dark:text-gray-100 mt-4">Profile</h1>
 
         {/* Profile Settings Card */}
         <Card className="my-6">
                 <CardHeader className="text-center">
                   <CardDescription className="text-gray-600">
-                    {isLoggedIn ? `Welcome back, ${Name}!` : 'Please register or login to continue.'}
+                    {isloggedIn ? `Welcome back, ${Name}!` : 'Please register or login to continue.'}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {isLoggedIn ? (
+                  {isloggedIn ? (
                     <div className="max-w-md mx-auto">
                     <div className="space-y-4">
                       <div className="">
                         <p className="text-lg font-semibold text-gray-900 text-left">{Email}</p>
                         <p className="text-sm text-gray-900 text-left">
-                          {/* {userType === 'ngo' ? 'NGO' : 'User'} */}
+                          {userType === 'ngo' ? 'NGO' : 'User'}
                         </p>
                       </div>
                     </div>          
@@ -146,7 +160,7 @@ const ProfilePage: React.FC = () => {
               </Card>
 
         {/* Theme Settings Card */}
-        <Card className="mb-6">
+        <Card className="mb-6 text-center">
           <CardHeader>
             <CardTitle>Theme</CardTitle>
             <CardDescription>Customize your theme preferences.</CardDescription>
@@ -165,7 +179,7 @@ const ProfilePage: React.FC = () => {
         </Card>
 
         {/* Notification Settings Card */}
-        <Card className="mb-6">
+        <Card className="mb-6 text-center">
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
             <CardDescription>Manage your notification preferences.</CardDescription>
@@ -184,7 +198,7 @@ const ProfilePage: React.FC = () => {
         </Card>
 
         {/* Danger Zone Card */}
-        <Card className="border-red-500">
+        <Card className="border-red-500 text-center">
           <CardHeader>
             <CardTitle className="text-red-500">Danger Zone</CardTitle>
             <CardDescription>Irreversible actions. Proceed with caution.</CardDescription>

@@ -12,9 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import apiUrl from "@/api/apiConfig";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const formSchema = z.object({
 	email: z.string().email("*Invalid email").nonempty("*This field is required"),
@@ -25,6 +26,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const LoginUser = () => {
 
+	const { login } = useAuth();
 	const navigate = useNavigate();
 
 	const form = useForm<FormValues>({
@@ -47,21 +49,24 @@ const LoginUser = () => {
 	  
 			const result = await response.json();
 			if(response.ok){
-			  alert(result.message);
-			  navigate('/');
+				const token = result.accessToken;
+				login(token);
+				alert("Logged in Successfully");
+				navigate('/');
 			}
 			else{
 			  alert("Error: " + result.message);
 			}
 		  }
 		  catch (error) {
-			alert("An error occured, Please try again!")
+			console.error("An error occured, Please try again!")
 		  }
 	}
 
+
 	return (
 		<>
-		{/* <Navbar /> */}
+		<Navbar />
 		<div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="p-5 space-y-5">
@@ -110,7 +115,7 @@ const LoginUser = () => {
 				</form>
 			</Form>
 		</div>
-		{/* <Footer /> */}
+		<Footer />
 		</>
 	)
 }

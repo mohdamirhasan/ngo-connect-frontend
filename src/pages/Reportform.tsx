@@ -16,8 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { MapPin, ImageIcon, Trash2 } from "lucide-react";
 import ngoCategories from "@/assets/ngoCategories.json";
 import { useLocation } from "@/hooks/useLocation";
-// import Footer from "@/components/Footer";
-// import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { Textarea } from "@/components/ui/textarea";
 import apiUrl from "@/api/apiConfig";
@@ -98,7 +98,7 @@ const Reportform: React.FC = () => {
   
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="max-w-md mx-auto p-4 border rounded-lg shadow mt-16">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-4">
@@ -291,7 +291,7 @@ const Reportform: React.FC = () => {
           </form>
         </Form>
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };
